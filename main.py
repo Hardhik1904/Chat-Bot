@@ -1,17 +1,14 @@
 import json
 from difflib import get_close_matches
-# Load the knowledge base from a JSON file
 def load_knowledge_base(file_path: str):
 
     with open(file_path, 'r') as file:
         data: dict = json.load(file)
     return data
-# Save the updated knowledge base to the JSON file
 def save_knowledge_base(file_path: str, data: dict):
 
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=2)
-# Find the closest matching question
 def find_best_match(user_question: str, questions: list[str]) -> str | None:
 
     matches: list = get_close_matches(user_question, questions, n=1, cutoff=0.6)
@@ -22,7 +19,6 @@ def get_answer_for_question(question: str, knowledge_base: dict) -> str | None:
         if q["question"] == question:
             return q["answer"]
     return None
-# Main function to handle user input and respond
 def chatbot():
 
     knowledge_base: dict = load_knowledge_base('knowledge_base.json')
@@ -33,11 +29,9 @@ def chatbot():
         if user_input.lower() == 'quit':
             break
 
-        # Finds the best match, otherwise returns None
         best_match: str | None = find_best_match(user_input, [q["question"] for q in knowledge_base["questions"]])
 
         if best_match:
-            # If there is a best match, return the answer from the knowledge base
             answer: str = get_answer_for_question(best_match, knowledge_base)
             print(f"Bot: {answer}")
         else:
